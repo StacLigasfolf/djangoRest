@@ -21,27 +21,41 @@ class App extends React.Components{
         const book4 = {id: 4, first_name: 'Push', author: author2}
 
         this.state = {
-            'authors': authors,
-            'books' : books,
+            'authors': [],
+            'books' : [],
         }
     }
-    componentDidMount() {
+
+    load_data() {
         axios.get('http//127.0.0.1:8000/api/authors').then(response=>{
             const authors = response.data
             this.setState(
                 {
-                    'authors': authors
+                    'authors': authors['results']
                 }
             )
         }).catch(error => console.log(error))
+
+        axios.get('http//127.0.0.1:8000/api/books').then(response=>{
+            const books = response.data['results']
+            this.setState(
+                {
+                    'books': books
+                }
+            )
+        }).catch(error => console.log(error))
+    }
+
+    componentDidMount() {
+       this.load_data()
     }
         
     render () {
         return (
             <div className='App'>
                 <HashRouter>
-                    <Route exact path='/' component={() => <AuthorList authors={this.state.authors}/>}>
-                <HashRouter/>
+                    <Route exact path='/' component={() => <AuthorList authors={this.state.authors}/>}/>
+                </HashRouter>
 
                 <AuthorList authors={this.state.authors} />
                 <BookList items={this.state.books}/>
