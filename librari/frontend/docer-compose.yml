@@ -1,0 +1,6 @@
+frontend:
+build: ./frontend
+ports:
+  - 80:80
+depends_on:
+  - nginx
